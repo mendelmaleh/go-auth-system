@@ -21,6 +21,15 @@ func main() {
 		return
 	}
 
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		io.WriteString(w, `<!DOCTYPE html>
+<form action="/checkPin">
+	<label for="pin">check pin</label>
+	<input type="number" name="pin"/>
+</form>
+<a href="/getPin/">get pin</a>`)
+	})
+
 	http.HandleFunc("/getPin/", func(w http.ResponseWriter, r *http.Request) {
 		out, err := getPin(client)
 		if err != nil {
