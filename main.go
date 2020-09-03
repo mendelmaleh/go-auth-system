@@ -11,15 +11,15 @@ import (
 
 var spec *redis.ConnectionSpec
 var client redis.Client
-var e error
+var err error
 
 var pinDuration int64 = 60 // How many time the pin should be valid (in seconds)
 
 func main() {
 	spec = redis.DefaultSpec().Db(2)
-	client, e = redis.NewSynchClientWithSpec(spec)
-	if e != nil {
-		fmt.Println("Failed to create the client", e)
+	client, err = redis.NewSynchClientWithSpec(spec)
+	if err != nil {
+		fmt.Println("Failed to create the client", err)
 		return
 	}
 
@@ -40,8 +40,8 @@ func checkPin(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	ex, e := client.Exists(pin[0])
-	if e != nil {
+	ex, err := client.Exists(pin[0])
+	if err != nil {
 		fmt.Fprintf(w, "Error: failed getting pin from DB.")
 		return
 	}
@@ -55,9 +55,9 @@ func checkPin(w http.ResponseWriter, req *http.Request) {
 
 func getPin(w http.ResponseWriter, req *http.Request) {
 	pin := strconv.Itoa(rangeIn(100000, 999999))
-	e := client.Set(pin, []byte("active"))
+	err := client.Set(pin, []byte("active"))
 	client.Expire(pin, pinDuration)
-	if e != nil {
+	if err != nil {
 		fmt.Fprintf(w, "Error: failed setting pin in the DB.")
 		return
 	}
