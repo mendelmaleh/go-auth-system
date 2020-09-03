@@ -16,7 +16,6 @@ var e error
 var pinDuration int64 = 60 // How many time the pin should be valid (in seconds)
 
 func main() {
-
 	spec = redis.DefaultSpec().Db(2)
 	client, e = redis.NewSynchClientWithSpec(spec)
 	if e != nil {
@@ -35,7 +34,6 @@ func rangeIn(low, hi int) int {
 }
 
 func checkPin(w http.ResponseWriter, req *http.Request) {
-
 	pin, ok := req.URL.Query()["pin"]
 	if !ok || len(pin[0]) < 1 {
 		fmt.Fprintf(w, "Error: pin is missing.")
